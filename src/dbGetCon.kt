@@ -1,11 +1,10 @@
 class dbGetCon: Database, DbConnect {
     /**
      * This method makes a connection to MySQL Server
-     * In this example, MySQL Server is running in the local host (so 127.0.0.1)
-     * at the standard port 3306
      */
     override fun connect(): Connection {
         val connectionProps = Properties()
+        var conn?: DriverManager = null
 
         connectionProps.put("user", dbUsername)
         connectionProps.put("password", dbPasswd)
