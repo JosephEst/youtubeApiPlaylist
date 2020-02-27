@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_youtubeapiplaylist" default="compile.module.youtubeapiplaylist">
+  <dirname property="module.youtubeapiplaylist.basedir" file="${ant.file.module_youtubeapiplaylist}"/>
+  
+  <property name="module.jdk.home.youtubeapiplaylist" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.youtubeapiplaylist" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.youtubeapiplaylist" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.youtubeapiplaylist" value="-encoding UTF-8 -source 11 -target 11 ${compiler.args}"/>
+  
+  <property name="youtubeapiplaylist.output.dir" value="${module.youtubeapiplaylist.basedir}/out/production/youtubeApiPlaylist"/>
+  <property name="youtubeapiplaylist.testoutput.dir" value="${module.youtubeapiplaylist.basedir}/out/test/youtubeApiPlaylist"/>
+  
+  <path id="youtubeapiplaylist.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="youtubeapiplaylist.module.production.classpath">
+    <path refid="${module.jdk.classpath.youtubeapiplaylist}"/>
+    <path refid="library.kotlinjavaruntime.classpath"/>
+  </path>
+  
+  <path id="youtubeapiplaylist.runtime.production.module.classpath">
+    <pathelement location="${youtubeapiplaylist.output.dir}"/>
+    <path refid="library.kotlinjavaruntime.classpath"/>
+  </path>
+  
+  <path id="youtubeapiplaylist.module.classpath">
+    <path refid="${module.jdk.classpath.youtubeapiplaylist}"/>
+    <pathelement location="${youtubeapiplaylist.output.dir}"/>
+    <path refid="library.kotlinjavaruntime.classpath"/>
+  </path>
+  
+  <path id="youtubeapiplaylist.runtime.module.classpath">
+    <pathelement location="${youtubeapiplaylist.testoutput.dir}"/>
+    <pathelement location="${youtubeapiplaylist.output.dir}"/>
+    <path refid="library.kotlinjavaruntime.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.youtubeapiplaylist">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.youtubeapiplaylist">
+    <patternset refid="excluded.from.module.youtubeapiplaylist"/>
+  </patternset>
+  
+  <path id="youtubeapiplaylist.module.sourcepath">
+    <dirset dir="${module.youtubeapiplaylist.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.youtubeapiplaylist" depends="compile.module.youtubeapiplaylist.production,compile.module.youtubeapiplaylist.tests" description="Compile module youtubeApiPlaylist"/>
+  
+  <target name="compile.module.youtubeapiplaylist.production" depends="register.custom.compilers" description="Compile module youtubeApiPlaylist; production classes">
+    <mkdir dir="${youtubeapiplaylist.output.dir}"/>
+    <javac2 destdir="${youtubeapiplaylist.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.youtubeapiplaylist}/javac">
+      <compilerarg line="${compiler.args.youtubeapiplaylist}"/>
+      <bootclasspath refid="youtubeapiplaylist.module.bootclasspath"/>
+      <classpath refid="youtubeapiplaylist.module.production.classpath"/>
+      <src refid="youtubeapiplaylist.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.youtubeapiplaylist"/>
+    </javac2>
+    
+    <copy todir="${youtubeapiplaylist.output.dir}">
+      <fileset dir="${module.youtubeapiplaylist.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.youtubeapiplaylist.tests" depends="register.custom.compilers,compile.module.youtubeapiplaylist.production" description="compile module youtubeApiPlaylist; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.youtubeapiplaylist" description="cleanup module">
+    <delete dir="${youtubeapiplaylist.output.dir}"/>
+    <delete dir="${youtubeapiplaylist.testoutput.dir}"/>
+  </target>
+</project>
