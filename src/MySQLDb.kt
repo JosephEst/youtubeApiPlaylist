@@ -4,9 +4,9 @@ import java.util.Properties
  * Program to list databases in MySQL using Kotlin
  */
 class MySQLDb {
-    internal var conn: Connection? = null
-    public var username = "mt" // provide the username
-    internal var password = "mt" // provide the corresponding password
+    private var conn: Connection? = null
+    private var username = "mt" // provide the username
+    private var password = "mt" // provide the corresponding password
 
     companion object Factory{
         fun create(): MySQLDb = MySQLDb("mt", "mt")
@@ -17,17 +17,22 @@ class MySQLDb {
         getConnection()
     }
 
-    fun executeMySQLQuery() {
+    fun mySqlQueryRows(query: String): String? {
         var stmt: Statement? = null
         var resultset: ResultSet? = null
+        var res: String? = null
+        var i: Int = 0
         try {
             stmt = conn!!.createStatement()
-            resultset = stmt!!.executeQuery("SHOW DATABASES;")
-            if (stmt.execute("SHOW DATABASES;")) {
+            resultset = stmt!!.executeQuery(query)
+            if (stmt.execute(query)) {
                 resultset = stmt.resultSet
+                res = ""
+                i = 0
             }
             while (resultset!!.next()) {
-                println(resultset.getString("Database"))
+                res += resultset.getString("Database") + "\n"
+                println(res)
             }
         } catch (ex: SQLException) {
             // handle any errors
@@ -48,13 +53,32 @@ class MySQLDb {
                 }
                 stmt = null
             }
-            if (conn != null) {
-                try {
-                    conn!!.close()
-                } catch (sqlEx: SQLException) {
-                }
-                conn = null
+        }
+        return res
+    }
+
+    fun mySqlUpdate (query: String):Int{
+        var res: Int = 0
+
+        if(conn == null) return -1
+
+        try {
+            res = conn!!.createStatement()!!.executeUpdate(query)
+            println(res)
+        } catch (ex: Exception) {
+            // handle any errors
+            ex.printStackTrace()
+        }
+        return res
+    }
+
+    fun dbCloseCon() {
+        if (conn != null) {
+            try {
+                conn!!.close()
+            } catch (sqlEx: SQLException) {
             }
+            conn = null
         }
     }
     /**
